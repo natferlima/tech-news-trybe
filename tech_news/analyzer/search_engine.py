@@ -1,4 +1,5 @@
 from tech_news.database import search_news
+from datetime import datetime
 
 
 # Requisito 6
@@ -12,8 +13,32 @@ def search_by_title(title):
 
 
 # Requisito 7
+# https://acervolima.com/python-validar-formato-de-data-de-string/
 def search_by_date(date):
-    """Seu código deve vir aqui"""
+    months_ptbr = {
+        1: 'janeiro',
+        2: 'fevereiro',
+        3: 'março',
+        4: 'abril',
+        5: 'maio',
+        6: 'junho',
+        7: 'julho',
+        8: 'agosto',
+        9: 'setembro',
+        10: 'outubro',
+        11: 'novembro',
+        12: 'dezembro',
+    }
+    try:
+        date = datetime.strptime(date, '%Y-%m-%d')
+    except ValueError:
+        raise ValueError('Data inválida')
+    new_date = f'{date.day} de {months_ptbr[date.month]} de {date.year}'
+    news = search_news({'timestamp': new_date})
+    news_by_date = []
+    for new in news:
+        news_by_date.append((new["title"], new["url"]))
+    return news_by_date
 
 
 # Requisito 8
